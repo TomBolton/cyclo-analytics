@@ -6,14 +6,13 @@ trigger:
 - master
 
 variables:
-  - group: azure-variable-group
+  - group: azure-storage-group
   - name: blob-container-name
     value: 'tb-ride-files'
 
 jobs:
-
-# Produces a list of ride files present in the blob container
-# within Azure, using Python.
+  
+# Produces a list of ride files present in the blob container within Azure, using Python.
 - job: generate_list_of_files
 
   steps:
