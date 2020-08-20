@@ -9,7 +9,8 @@ jobs:
   steps:
   - task: PythonScript@0
     inputs:
-      script: python src/get_list_of_files_from_blob.py
+      scriptSource: 'filepath'
+      scriptPath: python src/get_list_of_files_from_blob.py
     name: get_blob_files
 # The previous job generates filenames of the files present
 # in the blob container. Now process those files in parallel.
