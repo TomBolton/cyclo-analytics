@@ -12,4 +12,4 @@ filenames = {}
 for n, blob in enumerate(container_client.list_blobs()):
     filenames['file' + str(n)] = {'filename', blob.name}
 
-print(f"##vso[task.setVariable variable=files;isOutput=true]{json.dumps(filenames)}")
+print("##vso[task.setVariable variable=files;isOutput=true]{}".format(json.dumps(filenames)))
