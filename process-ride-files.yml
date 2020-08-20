@@ -23,7 +23,7 @@ jobs:
         filenames = {}
 
         for n, blob in enumerate(container_client.list_blobs()):
-          filenames[f'file{n}'] = blob.name
+          filenames[f'file{n}'] = {'filename', blob.name}
 
         print(f"##vso[task.setVariable variable=files;isOutput=true]{json.dumps(filenames)}")
 
@@ -33,6 +33,7 @@ jobs:
 - job: process_ride_file
   dependsOn: generate_list_of_files
   strategy:
-    matrix: $[ dependencies.generator.outputs['mtrx.legs'] ]
+    maxParallel: 10
+    matrix: $[ dependencies.generator.outputs['get_blob_files.files'] ]
   steps:
-  - script: echo $(myvar) # echos A or B depending on which leg is running
+  - script: echo $(filename) # echos A or B depending on which leg is running
