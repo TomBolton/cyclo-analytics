@@ -10,7 +10,12 @@ jobs:
 # Produces a list of ride files present in the blob container
 # within Azure, using Python.
 - job: generate_list_of_files
+
   steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+      
   - script: |
       python -m pip install --upgrade pip
       pip install azure-storage-blob
@@ -21,9 +26,11 @@ jobs:
 # The previous job generates filenames of the files present
 # in the blob container. Now process those files in parallel.
 - job: process_ride_file
+
   dependsOn: generate_list_of_files
   strategy:
     maxParallel: 10
     matrix: $[ dependencies.generator.outputs['get_blob_files.files'] ]
+
   steps:
   - script: echo $(filename) # echos A or B depending on which leg is running
