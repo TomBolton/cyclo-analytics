@@ -7,11 +7,7 @@
 - job: generate_list_of_files
   dependsOn: install_azure_blob
   steps:
-  - script: 'pip install azure-storage-blob'
-  - task: PythonScript@0
-    inputs:
-      scriptSource: 'filePath'
-      scriptPath: $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py
+  - script: pip install azure-storage-blob
   - script: python $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py
     name: get_blob_files
 
