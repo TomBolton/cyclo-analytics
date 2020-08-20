@@ -7,10 +7,8 @@ jobs:
 # within Azure, using Python.
 - job: generate_list_of_files
   steps:
-  - task: PythonScript@0
-    inputs:
-      scriptSource: 'filepath'
-      scriptPath: python /src/get_list_of_files_from_blob.py
+  - task: 
+    script: python /src/get_list_of_files_from_blob.py
     name: get_blob_files
 # The previous job generates filenames of the files present
 # in the blob container. Now process those files in parallel.
