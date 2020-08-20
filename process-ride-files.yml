@@ -21,6 +21,7 @@ jobs:
       versionSpec: '3.6'
       
   - script: |
+      echo Connection string: $(AZURE_STORAGE_CONNECTION_STRING)
       python -m pip install --upgrade pip
       pip install azure-storage-blob
       python $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py \
