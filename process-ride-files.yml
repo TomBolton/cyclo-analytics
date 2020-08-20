@@ -8,8 +8,8 @@
   dependsOn: install_azure_blob
   steps:
   - task: CmdLine@2
-      inputs:
-        script: 'pip install azure-storage-blob'
+    inputs:
+      script: 'pip install azure-storage-blob'
   - task: PythonScript@0
     inputs:
       scriptSource: 'filePath'
