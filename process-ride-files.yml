@@ -11,7 +11,7 @@ variables:
     value: 'tb-ride-files'
 
 jobs:
-  
+
 # Produces a list of ride files present in the blob container within Azure, using Python.
 - job: generate_list_of_files
 
@@ -36,7 +36,7 @@ jobs:
   dependsOn: generate_list_of_files
   strategy:
     maxParallel: 10
-    matrix: $[ dependencies.generator.outputs['get_blob_files.files'] ]
+    matrix: $[ dependencies.generate_list_of_files.outputs['get_blob_files.files'] ]
 
   steps:
   - script: echo $(filename) # echos A or B depending on which leg is running
