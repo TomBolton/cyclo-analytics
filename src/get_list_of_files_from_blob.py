@@ -66,13 +66,15 @@ def list_filenames(container_name: str, connection_string: str):
     filenames = {}
 
     for n, blob in enumerate(container_client.list_blobs()):
-        filenames['file' + str(n)] = {'filename', blob.name}
+        filenames['file' + str(n)] = {'filename': blob.name}
         print(n, ' ', blob.name)
+
+    json_string = json.dumps(filenames)
 
     # This sets the variable 'files' in Azure DevOps to be a matrix of values,
     # defined by the json string of file names. The 'files' variable can then
     # be passed onto subsequent jobs.
-    print("##vso[task.setVariable variable=files;isOutput=true]{}".format(json.dumps(filenames)))
+    print("##vso[task.setVariable variable=files;isOutput=true]{}".format(json_string))
 
 
 #
