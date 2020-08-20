@@ -3,6 +3,13 @@
 #
 
 jobs:
+# Install Azure blob python package
+- job: install_azure_blob
+  steps:
+    - task: CmdLine@2
+      inputs:
+        script: 'pip install azure-storage-blob'
+
 # Produces a list of ride files present in the blob container
 # within Azure, using Python.
 - job: generate_list_of_files
@@ -13,6 +20,7 @@ jobs:
       scriptPath: $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py
   - script: python $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py
     name: get_blob_files
+    
 # The previous job generates filenames of the files present
 # in the blob container. Now process those files in parallel.
 - job: process_ride_file
