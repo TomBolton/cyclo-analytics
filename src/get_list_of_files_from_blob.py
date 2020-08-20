@@ -50,6 +50,7 @@ def list_filenames(container_name: str, connection_string: str):
 
     for n, blob in enumerate(container_client.list_blobs()):
         filenames['file' + str(n)] = {'filename', blob.name}
+        print(n, ' ', blob.name)
 
     # This sets the variable 'files' in Azure DevOps to be a matrix of values,
     # defined by the json string of file names. The 'files' variable can then
