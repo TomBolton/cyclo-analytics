@@ -23,14 +23,29 @@ def parse_inputs():
     )
 
     parser.add_argument(
-        '--blob-connection-string',
-        dest='connection_string',
+        '--connection-string-file',
+        dest='connection_string_file',
         type=str,
         required=True,
-        help='The connection string from the Azure storage account.'
+        help='The file path of the text file containing the Azure storage connection string.'
     )
     
     return parser.parse_args()
+
+
+def read_connection_string_from_file(text_file_path: str):
+    """
+    Read the text file containing the Azure storage account connection string.
+
+    :param text_file_path: Path of the text file.
+    :return: Storage account connection string.
+    """
+
+    with open(text_file_path, 'r') as file:
+        text_from_file = file.read()
+
+    return text_from_file
+
 
 
 def list_filenames(container_name: str, connection_string: str):
@@ -60,6 +75,14 @@ def list_filenames(container_name: str, connection_string: str):
     print("##vso[task.setVariable variable=files;isOutput=true]{}".format(json.dumps(filenames)))
 
 
+#
+# Main
+#
+
+
 if __name__ == "__main__":
     args = parse_inputs()
-    list_filenames(args.container_name, args.connection_string)
+
+    connection_string = read_connection_string_from_file(args.connection_string_file)
+
+    list_filenames(args.container_name, connection_string)

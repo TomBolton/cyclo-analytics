@@ -6,7 +6,6 @@ trigger:
 - master
 
 variables:
-  - group: azure-storage-group
   - name: blob-container-name
     value: 'tb-ride-files'
 
@@ -16,17 +15,22 @@ jobs:
 - job: generate_list_of_files
 
   steps:
+
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
+
+  - task: DownloadSecureFile@1
+    name: connectionStringFile
+    inputs: 
+      secureFile: 'aar_storage_connection_string.txt'
       
   - script: |
-      echo Connection string: $(AZURE_STORAGE_CONNECTION_STRING)
       python -m pip install --upgrade pip
       pip install azure-storage-blob
       python $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py \
       --container-name=$(blob-container-name) \
-      --blob-connection-string=$(AZURE_STORAGE_CONNECTION_STRING) 
+      --connection-string-file=$(connectionStringFile.secureFilePath) 
     name: get_blob_files
     displayName: 'Create list of file in blob container'
 
