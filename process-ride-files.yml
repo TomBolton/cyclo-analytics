@@ -25,7 +25,7 @@ jobs:
       pip install azure-storage-blob
       python $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py \
       --blob-container=$(blob-container-name) \
-      --blob-conntection-string=$(AZURE_STORAGE_CONNECTION_STRING) 
+      --blob-connection-string=$(AZURE_STORAGE_CONNECTION_STRING) 
     name: get_blob_files
     displayName: 'Create list of file in blob container'
 
