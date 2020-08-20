@@ -2,19 +2,14 @@
 # Workflow for reading .fit files in parallel
 #
 
-jobs:
-# Install Azure blob python package
-- job: install_azure_blob
-  steps:
-    - task: CmdLine@2
-      inputs:
-        script: 'pip install azure-storage-blob'
-
 # Produces a list of ride files present in the blob container
 # within Azure, using Python.
 - job: generate_list_of_files
   dependsOn: install_azure_blob
   steps:
+  - task: CmdLine@2
+      inputs:
+        script: 'pip install azure-storage-blob'
   - task: PythonScript@0
     inputs:
       scriptSource: 'filePath'
