@@ -1,15 +1,62 @@
-import os, json
+import os, json, argparse
 from azure.storage.blob import BlobServiceClient
 
-CONTAINER_NAME = 'tb-ride-files'
 
-connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-service_client = BlobServiceClient.from_connection_string(connect_str)
-container_client = service_client.get_container_client(container=CONTAINER_NAME)
+def parse_inputs():
+    """ 
+    This Pythons script expects exactly two arguments: the name of
+    the Azure blob container and the corresponding connection string.
 
-filenames = {}
+    :return: The parser arguments.
+    """
 
-for n, blob in enumerate(container_client.list_blobs()):
-    filenames['file' + str(n)] = {'filename', blob.name}
+    parser = argparse.ArgumentParser(
+        description="Connect to an Azure blob container and use the filenames as DevOps variables."
+    )
 
-print("##vso[task.setVariable variable=files;isOutput=true]{}".format(json.dumps(filenames)))
+    parser.add_argument(
+        '--blob-container',
+        type=str,
+        required=True,
+        help="Name of the Azure blob container."
+    )
+
+    parser.add_argument(
+        '--blob-connection-string',
+        type=str,
+        required=True,
+        help='The connection string from the Azure storage account.'
+    )
+    
+    return parser.parse_args()
+
+
+def list_filenames(container_name: str, connection_string: str):
+    """
+    Connect to the Azure blob container containing the ride files
+    and list them. Create a dictionary of the file names, to be
+    used as the output.
+
+    :param container_name: Name of the Azure blob container.
+    :param connection_string: Azure storage account connection string.
+    """
+    
+    # Connect to the Azure blob container.
+    service_client = BlobServiceClient.from_connection_string(connection_string)
+    container_client = service_client.get_container_client(container=container_name)
+
+    # Create a dictionary of the file names.
+    filenames = {}
+
+    for n, blob in enumerate(container_client.list_blobs()):
+        filenames['file' + str(n)] = {'filename', blob.name}
+
+    # This sets the variable 'files' in Azure DevOps to be a matrix of values,
+    # defined by the json string of file names. The 'files' variable can then
+    # be passed onto subsequent jobs.
+    print("##vso[task.setVariable variable=files;isOutput=true]{}".format(json.dumps(filenames)))
+
+
+if __name__ == "__main__":
+    args = parse_inputs()
+    list_filenames(args.container_name, args.connection_string)
