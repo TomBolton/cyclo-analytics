@@ -15,14 +15,16 @@ def parse_inputs():
     )
 
     parser.add_argument(
-        '--blob-container',
+        '--container-name',
         type=str,
+        dest='container_name',
         required=True,
         help="Name of the Azure blob container."
     )
 
     parser.add_argument(
         '--blob-connection-string',
+        dest='connection_string',
         type=str,
         required=True,
         help='The connection string from the Azure storage account.'
