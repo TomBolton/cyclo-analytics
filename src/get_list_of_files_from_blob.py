@@ -10,6 +10,6 @@ container_client = service_client.get_container_client(container=CONTAINER_NAME)
 filenames = {}
 
 for n, blob in enumerate(container_client.list_blobs()):
-    filenames[f'file{n}'] = {'filename', blob.name}
+    filenames['file' + str(n)] = {'filename', blob.name}
 
 print(f"##vso[task.setVariable variable=files;isOutput=true]{json.dumps(filenames)}")
