@@ -1,7 +1,8 @@
 # 
 # Workflow for reading .fit files in parallel
 #
-
+jobs:
+  
 # Produces a list of ride files present in the blob container
 # within Azure, using Python.
 - job: generate_list_of_files
@@ -10,6 +11,7 @@
       pip install azure-storage-blob
       python $(Build.SourcesDirectory)/src/get_list_of_files_from_blob.py
     name: get_blob_files
+    displayName: 'Create list of file in blob container'
 
 # The previous job generates filenames of the files present
 # in the blob container. Now process those files in parallel.
